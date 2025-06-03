@@ -16,14 +16,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormControl, FormMessage } from "@/components/ui/form";
+import { FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
@@ -37,7 +32,7 @@ const registerSchema = z.object({
   password: z
     .string()
     .trim()
-    .min(8, { message: "A senha deve conter pelo menos 8 caracteres" }),
+    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
 });
 
 const SignUpForm = () => {
@@ -72,12 +67,13 @@ const SignUpForm = () => {
       },
     );
   }
+
   return (
     <Card>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <CardHeader>
-            <CardTitle>Criar Conta</CardTitle>
+            <CardTitle>Criar conta</CardTitle>
             <CardDescription>Crie uma conta para continuar.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

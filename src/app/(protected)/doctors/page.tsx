@@ -25,7 +25,9 @@ const DoctorsPage = async () => {
   if (!session?.user) {
     redirect("/authentication");
   }
-  console.log(session.user.clinic);
+  if (!session.user.plan) {
+    redirect("/new-subscription");
+  }
   if (!session.user.clinic) {
     redirect("/clinic-form");
   }
@@ -44,7 +46,6 @@ const DoctorsPage = async () => {
         </PageActions>
       </PageHeader>
       <PageContent>
-        <h1>Médicos</h1>
         <div className="grid grid-cols-3 gap-6">
           {doctors.map((doctor) => (
             <DoctorCard key={doctor.id} doctor={doctor} />

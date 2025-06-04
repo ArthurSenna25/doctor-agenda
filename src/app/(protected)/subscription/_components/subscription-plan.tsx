@@ -1,14 +1,22 @@
 "use client";
 
 import { loadStripe } from "@stripe/stripe-js";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { Check, Loader2, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
 
 import { createStripeCheckout } from "@/actions/create-stripe-checkout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface SubscriptionPlanProps {
   active?: boolean;
@@ -41,6 +49,7 @@ export function SubscriptionPlan({
       });
     },
   });
+
   const features = [
     "Cadastro de até 3 médicos",
     "Agendamentos ilimitados",
@@ -61,54 +70,79 @@ export function SubscriptionPlan({
   };
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold text-gray-900">Essential</h3>
-          {active && (
-            <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-              Atual
-            </Badge>
-          )}
+    <div className="relative pt-6">
+      {!active && (
+        <div className="absolute -top-4 left-1/2 z-10 -translate-x-1/2 transform">
+          <span className="rounded-full bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg">
+            Mais Popular
+          </span>
         </div>
-        <p className="text-gray-600">
-          Para profissionais autônomos ou pequenas clínicas
-        </p>
-        <div className="flex items-baseline">
-          <span className="text-3xl font-bold text-gray-900">R$59</span>
-          <span className="ml-1 text-gray-600">/ mês</span>
-        </div>
-      </CardHeader>
+      )}
+      <Card
+        className={cn(
+          "relative overflow-hidden border-blue-200 shadow-xl transition-all duration-300 hover:shadow-lg",
+          !active && "scale-105",
+          active && "ring-2 ring-green-500 ring-offset-2",
+          className,
+        )}
+      >
+        {active && (
+          <Badge className="absolute top-4 right-4 bg-green-100 text-green-800 hover:bg-green-100">
+            <Star className="mr-1 h-3 w-3" />
+            Ativo
+          </Badge>
+        )}
 
-      <CardContent>
-        <div className="space-y-4 border-t border-gray-200 pt-6">
+        <CardHeader className="pt-8 pb-4 text-center">
+          <CardTitle className="text-2xl font-bold text-blue-600">
+            Essential
+          </CardTitle>
+          <CardDescription className="text-muted-foreground text-sm">
+            Para profissionais autônomos ou pequenas clínicas
+          </CardDescription>
+          <div className="mt-4">
+            <span className="text-4xl font-bold text-blue-600">R$59</span>
+            <span className="text-muted-foreground ml-1">/ mês</span>
+          </div>
+        </CardHeader>
+
+        <CardContent className="space-y-3">
           {features.map((feature, index) => (
-            <div key={index} className="flex items-start">
-              <div className="flex-shrink-0">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+            <div key={index} className="flex items-center gap-3">
+              <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                <Check className="h-3 w-3" />
               </div>
-              <p className="ml-3 text-gray-600">{feature}</p>
+              <span className="text-sm text-gray-700 dark:text-gray-300">
+                {feature}
+              </span>
             </div>
           ))}
-        </div>
+        </CardContent>
 
-        <div className="mt-8">
+        <CardFooter className="pt-6">
           <Button
-            className="w-full"
-            variant="outline"
+            className={cn(
+              "w-full font-semibold",
+              active
+                ? "bg-green-600 hover:bg-green-700"
+                : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700",
+            )}
             onClick={active ? handleManagePlanClick : handleSubscribeClick}
             disabled={createStripeCheckoutAction.isExecuting}
           >
             {createStripeCheckoutAction.isExecuting ? (
-              <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processando...
+              </>
             ) : active ? (
               "Gerenciar assinatura"
             ) : (
-              "Fazer assinatura"
+              "Começar Agora"
             )}
           </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

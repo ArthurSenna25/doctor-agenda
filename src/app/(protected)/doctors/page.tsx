@@ -37,16 +37,20 @@ const DoctorsPage = async () => {
   return (
     <PageContainer>
       <PageHeader>
-        <PageHeaderContent>
-          <PageTitle>Médicos</PageTitle>
-          <PageDescription>Gerencie os médicos da sua clínica</PageDescription>
-        </PageHeaderContent>
-        <PageActions>
-          <AddDoctorButton />
-        </PageActions>
+        <div className="flex flex-col space-y-4">
+          <PageHeaderContent>
+            <PageTitle>Médicos</PageTitle>
+            <PageDescription>
+              Gerencie os médicos da sua clínica
+            </PageDescription>
+          </PageHeaderContent>
+          <PageActions>
+            <AddDoctorButton />
+          </PageActions>
+        </div>
       </PageHeader>
       <PageContent>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
           {doctors.map((doctor) => (
             <DoctorCard key={doctor.id} doctor={doctor} />
           ))}

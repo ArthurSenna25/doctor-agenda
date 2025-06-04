@@ -5,7 +5,7 @@ import "dayjs/locale/pt-br";
 import dayjs from "dayjs";
 
 dayjs.locale("pt-br");
-import { DollarSign } from "lucide-react";
+import { DollarSign, Info } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -60,49 +60,72 @@ const AppointmentsChart = ({
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center gap-2">
-        <DollarSign />
-        <CardTitle>Agendamentos e Faturamento</CardTitle>
+      <CardHeader className="flex flex-row items-center gap-2 pb-4">
+        <DollarSign className="h-4 w-4 sm:h-5 sm:w-5" />
+        <CardTitle className="text-sm sm:text-base">
+          Agendamentos e Faturamento
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px]">
+      <CardContent className="overflow-hidden px-2 sm:px-6">
+        <div className="mb-4 flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-700 dark:bg-blue-950/30 dark:text-blue-300">
+          <Info className="h-3 w-3 flex-shrink-0" />
+          <span>
+            Exibindo dados dos últimos 10 dias, hoje e próximos 10 dias
+          </span>
+        </div>
+        <ChartContainer
+          config={chartConfig}
+          className="min-h-[200px] w-full overflow-hidden sm:min-h-[300px]"
+        >
           <AreaChart
             data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            margin={{
+              top: 20,
+              right: 15,
+              left: 10,
+              bottom: 5,
+            }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="date"
               tickLine={false}
-              tickMargin={10}
+              tickMargin={8}
               axisLine={false}
+              fontSize={10}
+              className="sm:text-xs"
             />
             <YAxis
               yAxisId="left"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={4}
+              fontSize={10}
+              className="sm:!mr-2 sm:text-xs"
             />
             <YAxis
               yAxisId="right"
               orientation="right"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={4}
+              fontSize={10}
+              className="sm:!ml-2 sm:text-xs"
               tickFormatter={(value) => formatCurrencyInCents(value)}
             />
             <ChartTooltip
               content={
                 <ChartTooltipContent
+                  className="w-auto max-w-[280px] sm:max-w-none"
                   formatter={(value, name) => {
                     if (name === "revenue") {
                       return (
                         <>
                           <div className="h-3 w-3 rounded bg-[#10B981]" />
-                          <span className="text-muted-foreground">
+                          <span className="text-muted-foreground text-xs sm:text-sm">
                             Faturamento:
                           </span>
-                          <span className="font-semibold">
+                          <span className="text-xs font-semibold sm:text-sm">
                             {formatCurrencyInCents(Number(value))}
                           </span>
                         </>
@@ -111,10 +134,12 @@ const AppointmentsChart = ({
                     return (
                       <>
                         <div className="h-3 w-3 rounded bg-[#0B68F7]" />
-                        <span className="text-muted-foreground">
+                        <span className="text-muted-foreground text-xs sm:text-sm">
                           Agendamentos:
                         </span>
-                        <span className="font-semibold">{value}</span>
+                        <span className="text-xs font-semibold sm:text-sm">
+                          {value}
+                        </span>
                       </>
                     );
                   }}
